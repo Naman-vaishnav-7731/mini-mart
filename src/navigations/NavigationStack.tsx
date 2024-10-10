@@ -22,7 +22,7 @@ const Stack = createNativeStackNavigator<RootStackParamsList>();
 const NavigationStack: FC = () => {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName="HomeBottomBar">
+            <Stack.Navigator initialRouteName="SplashScreen">
                 <Stack.Screen name="LoginScreen" component={LoginScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="HomeBottomBar" component={HomeBottomBar} options={{ headerShown: false }} />
                 <Stack.Screen name="SplashScreen" component={SplashScreen} options={{ headerShown: false }} />

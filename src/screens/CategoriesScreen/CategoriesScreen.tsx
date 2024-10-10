@@ -1,13 +1,12 @@
-import { Text, View, FlatList, StyleSheet, Image, TouchableOpacity, SafeAreaView } from "react-native";
+import { Text, View, FlatList, StyleSheet, Image, TouchableOpacity, SafeAreaView, SectionList } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamsList } from "../../navigations/NavigationStack";
 import api from "../../networking/apiclient";
 import { useEffect, useState } from "react";
-// import ProductCard from "../../components/Products/ProductCard";
-import ProductCard from "../../components/ProductCard";
+import ProductCard from "../../components/Products/ProductCard";
 import Loader from "../../components/Loader";
 
-type ProductScreenProps = NativeStackScreenProps<RootStackParamsList, 'ProductScreen'>
+type ProductScreenProps = NativeStackScreenProps<RootStackParamsList, 'CategoriesScreen'>
 
 interface Product {
     id: number;
@@ -16,7 +15,7 @@ interface Product {
     images: []
 }
 
-const ProductScreen = ({ navigation }: ProductScreenProps) => {
+const CategoriesScreen = ({ navigation }: ProductScreenProps) => {
 
     const [productData, setProductData] = useState<any>([]);
     const [loading, setLoading] = useState<Boolean>(false);
@@ -27,7 +26,22 @@ const ProductScreen = ({ navigation }: ProductScreenProps) => {
             const response = await api.get('/products');
             setLoading(false);
             if (response?.status == 200 && response?.data) {
-                setProductData(response?.data);
+                
+                const productsMap = response?.data?.products?.reduce((acc, item) => {
+                    if (item?.category) {
+                        if (!acc[item.category]) {
+                            acc[item.category] = {
+                                title: item.category,
+                                data: []
+                            };
+                        }
+                        acc[item.category].data.push(item);
+                    }
+                    return acc;
+                }, {} as Record<string, { title: string; data: Product[] }>);
+
+                const products = Object.values(productsMap || {});
+                setProductData(products);
             } else {
                 setProductData([])
             }
@@ -49,6 +63,8 @@ const ProductScreen = ({ navigation }: ProductScreenProps) => {
         />
     );
 
+
+
     if (loading) {
         return (
             <Loader size={50} color={"black"} />
@@ -57,12 +73,14 @@ const ProductScreen = ({ navigation }: ProductScreenProps) => {
 
     return (
         <SafeAreaView style={styles.safeArea}>
-            <FlatList
+            <SectionList
                 renderItem={renderItem}
-                data={productData?.products}
+                sections={productData}
                 keyExtractor={(item) => item.id.toString()}
                 contentContainerStyle={styles.list}
-                numColumns={2}
+                renderSectionHeader={({ section: { title } }) => (
+                    <Text style={styles.header}>{title}</Text>
+                )}
             />
         </SafeAreaView>
     )
@@ -71,12 +89,18 @@ const ProductScreen = ({ navigation }: ProductScreenProps) => {
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
-        justifyContent: 'center',
     },
-    list: {
-        alignItems: 'center',
-        width: '100%',
-    }
+    list: {  
+    //    backgroundColor: 'red',
+       flexGrow: 1,
+    },
+    header: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 10,
+        color: 'black',
+        textTransform: 'capitalize'
+    },
 })
 
-export default ProductScreen;
+export default CategoriesScreen;

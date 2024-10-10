@@ -1,24 +1,41 @@
-import { SafeAreaView, View, StyleSheet, useColorScheme, TouchableHighlight, Image
+import {
+    SafeAreaView, View, StyleSheet, useColorScheme, ScrollView, TouchableHighlight, Image
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamsList } from "../../navigations/NavigationStack";
 import React from "react";
 import AppBar from "../../components/AppBar";
+import HomeBanner from "../../components/HomeBanner";
+import TitleBar from "../../components/TitleBar";
+import HomeCategoryList from "../../components/Category/HomeCategoryList";
+import ProductCard from "../../components/ProductCard";
+import { Searchbar } from 'react-native-paper';
 
-// Define Here Props Type of Home Screeen
+
 type HomeScreenProps = NativeStackScreenProps<RootStackParamsList, "Home">
 
 const Home = ({ navigation }: HomeScreenProps) => {
     const isDarkMode = useColorScheme() === "dark";
+    const [searchQuery, setSearchQuery] = React.useState('');
     return (
         <>
-            <AppBar />
             <SafeAreaView style={style.container}>
-                <View>
-                    <TouchableHighlight underlayColor={'white'} onPress={() => navigation.navigate('ProductScreen')}>
-                        <Image source={require('./banner.png')} style={style.cardImage} />
-                    </TouchableHighlight>
-                </View>
+            <Searchbar
+                        placeholder="Search Your Product"
+                        onChangeText={setSearchQuery}
+                        value={searchQuery}
+                        iconColor="black"
+                        placeholderTextColor={"black"}
+                        style={{backgroundColor: 'white', color: 'black'}}
+                    />
+                <ScrollView contentContainerStyle={{ flexGrow: 1, margin: 5 }}>
+                   
+                    <HomeBanner />
+                    <TitleBar title="Shop by Category" />
+                    <HomeCategoryList />
+                    <TitleBar title="Popular" />
+                    <ProductCard />
+                </ScrollView>
             </SafeAreaView>
         </>
     )

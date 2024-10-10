@@ -50,7 +50,7 @@ const LoginScreen = () => {
                     <View style={style.inputView}>
                         <TextInput
                             label="UserName"
-                            right={<TextInput.Icon icon="user-minus" />}
+                            right={<TextInput.Icon icon="eye" />}
                             style={style.input}
                             textColor="black"
                             cursorColor="black"

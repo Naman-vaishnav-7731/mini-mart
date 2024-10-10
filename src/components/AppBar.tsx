@@ -7,7 +7,6 @@ const AppBar = () => {
     return (
         <Appbar.Header style={style.header}>
             <Appbar.Content title="Mini Mart"  color='black'/>
-            <Appbar.Action icon="magnify" onPress={() => { }} color='black'  />
             <Appbar.Action icon={MORE_ICON} onPress={() => { }} color='black' />
         </Appbar.Header>
     )

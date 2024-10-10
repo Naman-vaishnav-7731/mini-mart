@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         elevation: 2,
         width: 180,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
     },
     cardImage: {
         height: 150,
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     },
     textContainer: {
         padding: 10,
-        
+
     },
     productTitle: {
         fontSize: 16,
